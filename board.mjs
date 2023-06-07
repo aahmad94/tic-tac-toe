@@ -1,20 +1,51 @@
+import Player from './player.mjs';
+
 export default class Board {
     constructor() {
-        this.board = [
-            [' ', ' ', ' '],
-            [' ', ' ', ' '],
-            [' ', ' ', ' ']
-        ];
+      this.board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+      ];
+      this.players = [
+        new Player('Player 1', 'X'),
+        new Player('Player 2', 'O')
+      ];
+      this.currentPlayerIndex = 0;
+      this.messageElement = document.getElementById('message');
+      this.cells = document.getElementsByClassName('cell');
+  
+      this.initializeBoard();
     }
-
-    makeMove(row, col, player) {
-        if (this.board[row][col] !== ' ') {
-            console.log("Invalid move!");
-            return false;
-        }
-        this.board[row][col] = player.symbol;
-        this.printBoard();
-        return true;
+  
+    initializeBoard() {
+      for (let i = 0; i < this.cells.length; i++) {
+        this.cells[i].innerText = '';
+        this.cells[i].addEventListener('click', () => this.makeMove(i));
+      }
+      this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
+    }
+  
+    makeMove(index) {
+      const row = Math.floor(index / 3);
+      const col = index % 3;
+  
+      if (this.board[row][col] !== '') {
+        this.messageElement.innerText = 'Invalid move!';
+        return;
+      }
+  
+      this.board[row][col] = this.players[this.currentPlayerIndex].marker;
+      this.cells[index].innerText = this.players[this.currentPlayerIndex].marker;
+      this.cells[index].classList.add(this.players[this.currentPlayerIndex].marker.toLowerCase());
+  
+      if (this.checkWin()) {
+        this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name} wins!`;
+        return;
+      }
+  
+      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+      this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
     }
 
     checkWin() {
@@ -42,10 +73,6 @@ export default class Board {
         }
         return false;
     }
-
-    printBoard() {
-        for (let i = 0; i < 3; i++) {
-            console.log(this.board[i]);
-        }
-    }
-}
+  }
+  
+  
