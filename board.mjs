@@ -34,15 +34,16 @@ export default class Board {
         this.messageElement.innerText = 'Invalid move!';
         return;
       }
-  
+      
+			if (this.checkWin()) {
+					this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name} wins!`;
+					return;
+			}
+
       this.board[row][col] = this.players[this.currentPlayerIndex].marker;
       this.cells[index].innerText = this.players[this.currentPlayerIndex].marker;
       this.cells[index].classList.add(this.players[this.currentPlayerIndex].marker.toLowerCase());
   
-      if (this.checkWin()) {
-        this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name} wins!`;
-        return;
-      }
   
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
       this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
