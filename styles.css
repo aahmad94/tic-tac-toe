@@ -1,13 +1,22 @@
 body {
-    background-color: #0f0f23;
+    background-color: #ffc927;
     color: #fff;
     font-family: "Courier New", monospace;
     text-align: center;
   }
   
+  .heading {
+    display: flex;
+    justify-content: center;
+    /* width: 40%; */
+  }
+
   h1 {
     font-size: 36px;
     margin-top: 30px;
+    padding: 15px;
+    background-color: #000;
+    color: #c6dc37;
   }
   
   .board {
@@ -21,6 +30,7 @@ body {
     width: 100px;
     height: 100px;
     margin: 5px;
+    font-weight: 900;
     background-color: #222;
     display: flex;
     justify-content: center;
@@ -34,15 +44,25 @@ body {
   }
   
   .cell.x {
-    color: #38ffc2;
+    color: #764de4;
   }
   
   .cell.o {
-    color: #ff3c38;
+    color: #c6dc37;
   }
   
+  .message-parent {
+    display: flex;
+    justify-content: center;
+    
+  }
+
   .message {
     font-size: 24px;
+    font-weight: 700;
     margin-top: 20px;
+    padding: 15px;
+    background-color: #000;
+    color: #c6dc37;
   }
   

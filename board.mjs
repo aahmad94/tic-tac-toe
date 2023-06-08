@@ -49,28 +49,37 @@ export default class Board {
     }
 
     checkWin() {
-        for (let i = 0; i < 3; i++) {
-            if (this.board[i][0] !== ' ' &&
-                this.board[i][0] === this.board[i][1] &&
-                this.board[i][0] === this.board[i][2]) {
-                return true;
-            }
-            if (this.board[0][i] !== ' ' &&
-                this.board[0][i] === this.board[1][i] &&
-                this.board[0][i] === this.board[2][i]) {
+        // Check rows
+        for (let row = 0; row < 3; row++) {
+            if (this.board[row][0] !== '' &&
+                this.board[row][0] === this.board[row][1] &&
+                this.board[row][0] === this.board[row][2]) {
                 return true;
             }
         }
-        if (this.board[0][0] !== ' ' &&
+
+        // Check columns
+        for (let col = 0; col < 3; col++) {
+            if (this.board[0][col] !== '' &&
+                this.board[0][col] === this.board[1][col] &&
+                this.board[0][col] === this.board[2][col]) {
+                return true;
+            }
+        }
+
+        // Check diagonals
+        if (this.board[0][0] !== '' &&
             this.board[0][0] === this.board[1][1] &&
             this.board[0][0] === this.board[2][2]) {
             return true;
         }
-        if (this.board[2][0] !== ' ' &&
+
+        if (this.board[2][0] !== '' &&
             this.board[2][0] === this.board[1][1] &&
             this.board[2][0] === this.board[0][2]) {
             return true;
         }
+
         return false;
     }
   }
