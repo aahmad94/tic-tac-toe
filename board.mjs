@@ -24,6 +24,7 @@ export default class Board {
         this.cells[i].addEventListener('click', () => this.makeMove(i));
       }
       this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
+			this.setMessageColor(this.currentPlayerIndex);
     }
   
     makeMove(index) {
@@ -47,7 +48,16 @@ export default class Board {
   
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
       this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
+			this.setMessageColor(this.currentPlayerIndex);
     }
+
+		setMessageColor(idx) {
+			if (this.players[idx].marker === 'X') {
+				this.messageElement.style.color = "#764de4";
+			} else {
+				this.messageElement.style.color = "#c6dc37";
+			}
+		}
 
     checkWin() {
         // Check rows
