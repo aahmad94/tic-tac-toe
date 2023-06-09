@@ -1,4 +1,5 @@
 import Player from './player.mjs';
+import Cat from './cat.mjs';
 
 export default class Board {
     constructor() {
@@ -16,6 +17,7 @@ export default class Board {
     }
   
     initializeBoard() {
+			// new Cat();
 			this.won = false;
 			Array.prototype.forEach.call(this.cells, (cell) => {
 				cell.className = "cell";
