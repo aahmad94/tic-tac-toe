@@ -50,10 +50,11 @@ body {
     color: #c6dc37;
   }
   
-  .message-parent {
+  #message-parent {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    
+    align-items: center;
   }
 
   .message {
@@ -64,4 +65,8 @@ body {
     background-color: #000;
     color: #c6dc37;
   }
-  
+
+  #play-btn:hover {
+     cursor: pointer;
+     background-color: #222;
+  }

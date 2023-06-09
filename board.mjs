@@ -2,11 +2,6 @@ import Player from './player.mjs';
 
 export default class Board {
     constructor() {
-      this.board = [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-      ];
       this.players = [
         new Player('Player 1', 'X'),
         new Player('Player 2', 'O')
@@ -14,85 +9,119 @@ export default class Board {
       this.currentPlayerIndex = 0;
       this.messageElement = document.getElementById('message');
       this.cells = document.getElementsByClassName('cell');
+			this.won = false;
+			this.tie = false;
   
       this.initializeBoard();
     }
   
     initializeBoard() {
+			this.won = false;
+			Array.prototype.forEach.call(this.cells, (cell) => {
+				cell.className = "cell";
+			});
+
+			const board = [
+				['', '', ''],
+				['', '', ''],
+				['', '', '']
+			];
+
       for (let i = 0; i < this.cells.length; i++) {
         this.cells[i].innerText = '';
-        this.cells[i].addEventListener('click', () => this.makeMove(i));
+        this.cells[i].addEventListener('click', () => this.makeMove(i, board));
       }
       this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
 			this.setMessageColor(this.currentPlayerIndex);
     }
   
-    makeMove(index) {
+    makeMove(index, board) {
       const row = Math.floor(index / 3);
       const col = index % 3;
   
-      if (this.board[row][col] !== '') {
+      if (board[row][col] !== '') {
         this.messageElement.innerText = 'Invalid move!';
         return;
       }
       
-			if (this.checkWin()) {
-					this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name} wins!`;
-					return;
+			if (!this.checkWin(board)) {
+				board[row][col] = this.players[this.currentPlayerIndex].marker;
+				this.cells[index].innerText = this.players[this.currentPlayerIndex].marker;
+				this.cells[index].classList.add(this.players[this.currentPlayerIndex].marker.toLowerCase());		
 			}
+			
+			if (this.checkWin(board)) {
+					this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name} wins!`;
+					if (!this.won) {
+						this.playAgain();
+					}
+					this.won = true;
+					return;
+			} 
 
-      this.board[row][col] = this.players[this.currentPlayerIndex].marker;
-      this.cells[index].innerText = this.players[this.currentPlayerIndex].marker;
-      this.cells[index].classList.add(this.players[this.currentPlayerIndex].marker.toLowerCase());
-  
-  
-      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-      this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
+			this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+			this.messageElement.innerText = `${this.players[this.currentPlayerIndex].name}'s turn (${this.players[this.currentPlayerIndex].marker})`;
 			this.setMessageColor(this.currentPlayerIndex);
+  
     }
 
-		setMessageColor(idx) {
-			if (this.players[idx].marker === 'X') {
+		setMessageColor(index) {
+			if (this.players[index].marker === 'X') {
 				this.messageElement.style.color = "#764de4";
 			} else {
 				this.messageElement.style.color = "#c6dc37";
 			}
 		}
 
-    checkWin() {
+    checkWin(board) {
         // Check rows
         for (let row = 0; row < 3; row++) {
-            if (this.board[row][0] !== '' &&
-                this.board[row][0] === this.board[row][1] &&
-                this.board[row][0] === this.board[row][2]) {
-                return true;
+            if (board[row][0] !== '' &&
+                board[row][0] === board[row][1] &&
+                board[row][0] === board[row][2]) {
+									return true;
             }
         }
 
         // Check columns
         for (let col = 0; col < 3; col++) {
-            if (this.board[0][col] !== '' &&
-                this.board[0][col] === this.board[1][col] &&
-                this.board[0][col] === this.board[2][col]) {
-                return true;
+            if (board[0][col] !== '' &&
+                board[0][col] === board[1][col] &&
+                board[0][col] === board[2][col]) {
+									return true;
             }
         }
 
         // Check diagonals
-        if (this.board[0][0] !== '' &&
-            this.board[0][0] === this.board[1][1] &&
-            this.board[0][0] === this.board[2][2]) {
-            return true;
+        if (board[0][0] !== '' &&
+            board[0][0] === board[1][1] &&
+            board[0][0] === board[2][2]) {
+							return true;
         }
 
-        if (this.board[2][0] !== '' &&
-            this.board[2][0] === this.board[1][1] &&
-            this.board[2][0] === this.board[0][2]) {
-            return true;
+        if (board[2][0] !== '' &&
+            board[2][0] === board[1][1] &&
+            board[2][0] === board[0][2]) {
+							return true;
         }
 
         return false;
     }
+
+		playAgain() {
+			const messageParent = document.getElementById("message-parent");
+			const playAgainButton = document.createElement("div");
+
+			playAgainButton.setAttribute("class", "message");
+			playAgainButton.setAttribute("id", "play-btn");
+			playAgainButton.innerHTML = "Play again";
+			
+			playAgainButton.addEventListener("click", () => {
+				this.initializeBoard();
+				messageParent.removeChild(playAgainButton);
+			});
+
+			messageParent.appendChild(playAgainButton);
+		}
+			
   }
-  
-  
